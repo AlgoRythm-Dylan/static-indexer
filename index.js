@@ -21,6 +21,7 @@ import { load } from "cheerio";
 
 class Index {
     constructor(){
+        this.totalDocumentCount = 0;
         this.entries = {};
     }
     record(word, document){
@@ -75,6 +76,7 @@ const index = new Index();
 
 for(const file of await readdir(directoryToScan)){
     if(file.toLowerCase().endsWith(".html")){
+        index.totalDocumentCount++;
         const text = await readFile(join(directoryToScan, file));
         const $ = load(text);
         const body = $(documentBodyQuery);
@@ -84,4 +86,4 @@ for(const file of await readdir(directoryToScan)){
     }
 }
 
-await writeFile("index.json", JSON.stringify(index.entries));
+await writeFile("index.json", JSON.stringify(index));
